@@ -38,7 +38,7 @@ async def get_todo_by_id(todoID: int, db: Session = Depends(get_db)):
 
 
 @app.post('/', status_code=status.HTTP_201_CREATED)
-async def add_todo(todo:Todo, db: Session = Depends(get_db)):
+async def add_todo(todo: Todo, db: Session = Depends(get_db)):
     todo_model = models.TodoEntity()
     todo_model.title = todo.title
     todo_model.description = todo.description
@@ -48,3 +48,20 @@ async def add_todo(todo:Todo, db: Session = Depends(get_db)):
     db.add(todo_model)
     db.commit()
     return {'message': 'todo added!'}
+
+
+@app.put('/', status_code=status.HTTP_202_ACCEPTED)
+async def update_todo(todoId: int, todo: Todo, db: Session = Depends(get_db)):
+    todo_model = db.query(models.TodoEntity).filter(models.TodoEntity.id == todoId).first()
+
+    if not todo_model:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    todo_model.title = todo.title
+    todo_model.description = todo.description
+    todo_model.priority = todo.priority
+    todo_model.complete = todo.complete
+
+    db.add(todo_model)
+    db.commit()
+    return {'message': 'todo updated!'}
