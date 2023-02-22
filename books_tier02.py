@@ -2,7 +2,7 @@ from uuid import UUID
 from typing import Optional
 from pydantic import BaseModel, Field
 from starlette.responses import JSONResponse
-from fastapi import FastAPI, HTTPException, Request, status, Form
+from fastapi import FastAPI, HTTPException, Request, status, Form, Header
 
 
 # Response BaseModel
@@ -128,3 +128,9 @@ def del_book_by_uid(uid: UUID):
 @app.post('/books/login/')
 async def books_login(username: str = Form(...), password: str = Form(...)):
     return {'username': username, 'password': password}
+
+
+# Header
+@app.get('/header')
+async def get_header(random_header: Optional[str] = Header(None)):
+    return {'header': random_header}
