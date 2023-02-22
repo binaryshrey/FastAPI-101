@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # connect and create new sqlite db
-SQLALCHEMY_DATABASE_URL = 'sql:///./todos.db'
+SQLALCHEMY_DATABASE_URL = 'sqlite:///./todos.db'
 
 
 # used in other areas of the app
