@@ -65,3 +65,16 @@ async def update_todo(todoId: int, todo: Todo, db: Session = Depends(get_db)):
     db.add(todo_model)
     db.commit()
     return {'message': 'todo updated!'}
+
+
+
+@app.delete('/', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_todo(todoId: int, db: Session = Depends(get_db)):
+    todo_model = db.query(models.TodoEntity).filter(models.TodoEntity.id == todoId).first()
+
+    if not todo_model:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    db.query(models.TodoEntity).filter(models.TodoEntity.id == todoId).delete()
+    db.commit()
+    return {'message': 'todo deleted!'}
